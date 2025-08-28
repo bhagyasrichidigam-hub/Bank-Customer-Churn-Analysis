@@ -1,0 +1,596 @@
+-- Complete dataset of Bank Customer churn
+SELECT * FROM bank_customer_churn.`customer-churn-records`;
+
+-- Checking for missing values
+SELECT 
+    COUNT(*) AS TotalRecords,
+    SUM(CASE WHEN RowNumber IS NULL THEN 1 ELSE 0 END) AS MissingRowNumber,
+    SUM(CASE WHEN CustomerId IS NULL THEN 1 ELSE 0 END) AS MissingCustomerId,
+    SUM(CASE WHEN Surname IS NULL THEN 1 ELSE 0 END) AS MissingSurname,
+    SUM(CASE WHEN CreditScore IS NULL THEN 1 ELSE 0 END) AS MissingCreditScore,
+    SUM(CASE WHEN Geography IS NULL THEN 1 ELSE 0 END) AS MissingGeography,
+    SUM(CASE WHEN Gender IS NULL THEN 1 ELSE 0 END) AS MissingGender,
+    SUM(CASE WHEN Age IS NULL THEN 1 ELSE 0 END) AS MissingAge,
+    SUM(CASE WHEN Tenure IS NULL THEN 1 ELSE 0 END) AS MissingTenure,
+    SUM(CASE WHEN Balance IS NULL THEN 1 ELSE 0 END) AS MissingBalance,
+    SUM(CASE WHEN NumOfProducts IS NULL THEN 1 ELSE 0 END) AS MissingNumOfProducts,
+    SUM(CASE WHEN HasCrCard IS NULL THEN 1 ELSE 0 END) AS MissingHasCrCard,
+    SUM(CASE WHEN IsActiveMember IS NULL THEN 1 ELSE 0 END) AS MissingIsActiveMember,
+    SUM(CASE WHEN EstimatedSalary IS NULL THEN 1 ELSE 0 END) AS MissingEstimatedSalary,
+    SUM(CASE WHEN Exited IS NULL THEN 1 ELSE 0 END) AS MissingExited,
+    SUM(CASE WHEN Complain IS NULL THEN 1 ELSE 0 END) AS MissingComplain,
+    SUM(CASE WHEN `Satisfaction Score` IS NULL THEN 1 ELSE 0 END) AS MissingSatisfactionScore,
+    SUM(CASE WHEN `Card Type` IS NULL THEN 1 ELSE 0 END) AS MissingCardType,
+    SUM(CASE WHEN `Point Earned` IS NULL THEN 1 ELSE 0 END) AS MissingPointEarned
+FROM bank_customer_churn.`customer-churn-records`;
+
+-- Summary Statistics for Numerical Columns
+SELECT 
+    COUNT(*) AS TotalRecords,
+    AVG(CreditScore) AS AvgCreditScore,
+    MIN(CreditScore) AS MinCreditScore,
+    MAX(CreditScore) AS MaxCreditScore,
+    STDDEV(CreditScore) AS StdDevCreditScore,
+    
+    AVG(Age) AS AvgAge,
+    MIN(Age) AS MinAge,
+    MAX(Age) AS MaxAge,
+    STDDEV(Age) AS StdDevAge,
+    
+    AVG(Balance) AS AvgBalance,
+    MIN(Balance) AS MinBalance,
+    MAX(Balance) AS MaxBalance,
+    STDDEV(Balance) AS StdDevBalance,
+
+    AVG(EstimatedSalary) AS AvgEstimatedSalary,
+    MIN(EstimatedSalary) AS MinEstimatedSalary,
+    MAX(EstimatedSalary) AS MaxEstimatedSalary,
+    STDDEV(EstimatedSalary) AS StdDevEstimatedSalary,
+
+    AVG(`Satisfaction Score`) AS AvgSatisfactionScore,
+    MIN(`Satisfaction Score`) AS MinSatisfactionScore,
+    MAX(`Satisfaction Score`) AS MaxSatisfactionScore,
+    STDDEV(`Satisfaction Score`) AS StdDevSatisfactionScore,
+
+    AVG(`Point Earned`) AS AvgPointsEarned,
+    MIN(`Point Earned`) AS MinPointsEarned,
+    MAX(`Point Earned`) AS MaxPointsEarned,
+    STDDEV(`Point Earned`) AS StdDevPointsEarned
+FROM bank_customer_churn.`customer-churn-records`;
+
+-- Summary Statistics for Categorical Columns
+SELECT
+    COUNT(DISTINCT Surname) AS UniqueSurnames,
+    COUNT(Surname) AS TotalSurnames,
+    COUNT(DISTINCT Geography) AS UniqueGeographies,
+    COUNT(Geography) AS TotalGeographies,
+    COUNT(DISTINCT Gender) AS UniqueGenders,
+    COUNT(Gender) AS TotalGenders,
+    COUNT(DISTINCT `Card Type`) AS UniqueCardTypes,
+    COUNT(`Card Type`) AS TotalCardTypes
+FROM bank_customer_churn.`customer-churn-records`;
+
+-- Counts of each CustomerId
+SELECT 
+    CustomerId, 
+    COUNT(*) AS Occurrences
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY CustomerId
+ORDER BY Occurrences DESC;
+
+-- Calculating the churn rate among the total customers
+SELECT 
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS ChurnRatePercentage
+FROM bank_customer_churn.`customer-churn-records`;
+
+-- Distribution Count for Geography
+SELECT 
+    Geography, COUNT(*) AS GeographyCount
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY Geography;
+
+-- Distribution Count for Gender Count
+SELECT 
+    Gender, COUNT(*) AS GenderCount
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY Gender;
+
+-- Distribution Count for Card Type
+SELECT 
+    `Card Type`, COUNT(*) AS CardTypeCount
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY `Card Type`;
+
+-- Distribution Count for Satisfaction Score
+SELECT 
+    `Satisfaction Score`, COUNT(*) AS SatisfactionScoreCount
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY `Satisfaction Score`;
+
+-- Distribution Count for Activity Status
+SELECT 
+    IsActiveMember, COUNT(*) AS IsActiveMemberCount
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY IsActiveMember;
+
+-- Distribution Count for Credit Card Status
+SELECT 
+    HasCrCard, COUNT(*) AS HasCrCardCount
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY HasCrCard;
+
+-- Distribution for Credit Score
+SELECT 
+    `CreditScore`, COUNT(*) AS CreditScoreCount
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY `CreditScore`
+ORDER BY CreditScore;
+
+-- Distribution for Age
+SELECT 
+    Age, COUNT(*) AS AgeCount
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY Age
+ORDER BY Age;
+
+-- Distribution for Tenure
+SELECT 
+    Tenure, COUNT(*) AS TenureCount
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY Tenure
+ORDER BY Tenure;
+
+-- Distribution for Balance
+SELECT 
+    Balance, COUNT(*) AS BalanceCount
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY Balance
+ORDER BY Balance;
+
+-- Distribution for Number of Products
+SELECT 
+    NumOfProducts, COUNT(*) AS NumOfProductsCount
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY NumOfProducts
+ORDER BY NumOfProducts;
+
+-- Distribution for Estimated Salary
+SELECT 
+    EstimatedSalary, COUNT(*) AS EstimatedSalaryCount
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY EstimatedSalary
+ORDER BY EstimatedSalary;
+
+-- Distribution for Points Earned
+SELECT 
+    `Point Earned`, COUNT(*) AS PointsEarnedCount
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY `Point Earned`
+ORDER BY `Point Earned`;
+
+-- Categorical Variables Against Target (Exited) and Churn Rate
+-- Geography
+SELECT 
+    Geography, 
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    (SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) * 100.0) / COUNT(*) AS ChurnRatePercentage
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY Geography;
+
+-- Gender
+SELECT 
+    Gender, 
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    (SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) * 100.0) / COUNT(*) AS ChurnRatePercentage
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY Gender;
+
+-- Card Type
+SELECT 
+    `Card Type`, 
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    (SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) * 100.0) / COUNT(*) AS ChurnRatePercentage
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY `Card Type`;
+
+-- Satisfaction Score
+SELECT 
+    `Satisfaction Score`, 
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    (SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) * 100.0) / COUNT(*) AS ChurnRatePercentage
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY `Satisfaction Score`;
+
+-- Activity Status
+SELECT 
+    IsActiveMember, 
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    (SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) * 100.0) / COUNT(*) AS ChurnRatePercentage
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY IsActiveMember;
+
+-- Credit Card Status
+SELECT 
+    HasCrCard, 
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    (SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) * 100.0) / COUNT(*) AS ChurnRatePercentage
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY HasCrCard;
+
+
+-- Churn rate for numerical variables (using ranges)
+-- Credit Scores
+SELECT 
+    CASE 
+        WHEN CreditScore BETWEEN 300 AND 500 THEN '300-500'
+        WHEN CreditScore BETWEEN 501 AND 600 THEN '501-600'
+        WHEN CreditScore BETWEEN 601 AND 700 THEN '601-700'
+        WHEN CreditScore BETWEEN 701 AND 800 THEN '701-800'
+        WHEN CreditScore > 800 THEN '800+'
+    END AS CreditScoreRange,
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    (SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) * 100.0) / COUNT(*) AS ChurnRatePercentage
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY CreditScoreRange;
+
+-- Age
+SELECT 
+    CASE 
+        WHEN Age BETWEEN 18 AND 30 THEN '18-30'
+        WHEN Age BETWEEN 31 AND 40 THEN '31-40'
+        WHEN Age BETWEEN 41 AND 50 THEN '41-50'
+        WHEN Age BETWEEN 51 AND 60 THEN '51-60'
+        WHEN Age > 60 THEN '60+'
+    END AS AgeRange,
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    (SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) * 100.0) / COUNT(*) AS ChurnRatePercentage
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY AgeRange;
+
+-- Tenure
+SELECT 
+    CASE 
+        WHEN Tenure BETWEEN 0 AND 1 THEN '0-1'
+        WHEN Tenure BETWEEN 2 AND 3 THEN '2-3'
+        WHEN Tenure BETWEEN 4 AND 5 THEN '4-5'
+        WHEN Tenure BETWEEN 6 AND 7 THEN '6-7'
+        WHEN Tenure > 7 THEN '7+'
+    END AS TenureRange,
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    (SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) * 100.0) / COUNT(*) AS ChurnRatePercentage
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY TenureRange;
+
+-- Balance
+SELECT 
+    CASE 
+        WHEN Balance BETWEEN 0 AND 50000 THEN '0-50k'
+        WHEN Balance BETWEEN 50001 AND 100000 THEN '50k-100k'
+        WHEN Balance BETWEEN 100001 AND 200000 THEN '100k-200k'
+        WHEN Balance > 200000 THEN '200k+'
+    END AS BalanceRange,
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    (SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) * 100.0) / COUNT(*) AS ChurnRatePercentage
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY BalanceRange;
+
+-- Number of Products
+SELECT 
+    CASE 
+        WHEN NumOfProducts = 1 THEN '1 Product'
+        WHEN NumOfProducts = 2 THEN '2 Products'
+        WHEN NumOfProducts = 3 THEN '3 Products'
+        WHEN NumOfProducts >= 4 THEN '4+ Products'
+    END AS ProductsRange,
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    (SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) * 100.0) / COUNT(*) AS ChurnRatePercentage
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY ProductsRange;
+
+-- Estimated Salary
+SELECT 
+    CASE 
+        WHEN EstimatedSalary BETWEEN 0 AND 50000 THEN '0-50k'
+        WHEN EstimatedSalary BETWEEN 50001 AND 100000 THEN '50k-100k'
+        WHEN EstimatedSalary BETWEEN 100001 AND 200000 THEN '100k-200k'
+        WHEN EstimatedSalary > 200000 THEN '200k+'
+    END AS SalaryRange,
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    (SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) * 100.0) / COUNT(*) AS ChurnRatePercentage
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY SalaryRange;
+
+-- Points Earned
+SELECT 
+    CASE 
+        WHEN `Point Earned` BETWEEN 0 AND 500 THEN '0-500'
+        WHEN `Point Earned` BETWEEN 501 AND 1000 THEN '501-1000'
+        WHEN `Point Earned` BETWEEN 1001 AND 1500 THEN '1001-1500'
+        WHEN `Point Earned` > 1500 THEN '1500+'
+    END AS PointsRange,
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    (SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) * 100.0) / COUNT(*) AS ChurnRatePercentage
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY PointsRange;
+
+-- Churn Rate by Region and Gender
+SELECT 
+    Geography,
+    Gender,
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    ROUND(SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) / COUNT(*) * 100, 2) AS ChurnRate
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY Geography, Gender
+ORDER BY ChurnRate DESC;
+
+-- Churn Rate by Age Groups
+SELECT 
+    CASE
+        WHEN Age < 30 THEN 'Under 30'
+        WHEN Age BETWEEN 30 AND 40 THEN '30-40'
+        WHEN Age BETWEEN 41 AND 50 THEN '41-50'
+        WHEN Age BETWEEN 51 AND 60 THEN '51-60'
+        WHEN Age BETWEEN 61 AND 70 THEN '61-70'
+        WHEN Age BETWEEN 71 AND 80 THEN '71-80'
+        ELSE '80+' 
+    END AS AgeGroup,
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    ROUND(SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) / COUNT(*) * 100, 2) AS ChurnRate
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY AgeGroup
+ORDER BY ChurnRate DESC;
+
+-- Average Tenure and Churn Rate by Product Usage
+SELECT 
+    NumOfProducts,
+    AVG(Tenure) AS AvgTenure,
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    ROUND(SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) / COUNT(*) * 100, 2) AS ChurnRate
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY NumOfProducts
+ORDER BY ChurnRate DESC;
+
+-- Churn Rate Based on Credit Score and Balance
+SELECT 
+    CASE
+        WHEN CreditScore BETWEEN 300 AND 499 THEN '300-499'
+        WHEN CreditScore BETWEEN 500 AND 599 THEN '500-599'
+        WHEN CreditScore BETWEEN 600 AND 699 THEN '600-699'
+        WHEN CreditScore BETWEEN 700 AND 799 THEN '700-799'
+        ELSE '800+' 
+    END AS CreditScoreGroup,
+    CASE
+        WHEN Balance < 50000 THEN 'Low Balance'
+        WHEN Balance BETWEEN 50000 AND 100000 THEN 'Medium Balance'
+        ELSE 'High Balance' 
+    END AS BalanceGroup,
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    ROUND(SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) / COUNT(*) * 100, 2) AS ChurnRate
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY CreditScoreGroup, BalanceGroup
+ORDER BY ChurnRate DESC;
+
+-- Churn Rate and Satisfaction Scores
+SELECT 
+    `Satisfaction Score`,
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    ROUND(SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) / COUNT(*) * 100, 2) AS ChurnRate
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY `Satisfaction Score`
+ORDER BY ChurnRate DESC;
+
+-- Churn Rate by Card Type and Active Member Status
+SELECT 
+    `Card Type`,
+    IsActiveMember,
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    ROUND(SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) / COUNT(*) * 100, 2) AS ChurnRate
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY `Card Type`, IsActiveMember
+ORDER BY ChurnRate DESC;
+
+-- Churn Rate Over Time (Tenure vs Exited)
+SELECT 
+    Tenure,
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    ROUND(SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) / COUNT(*) * 100, 2) AS ChurnRate
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY Tenure
+ORDER BY ChurnRate DESC;
+
+-- Correlation Between Churn and Customer Engagement (Estimated Salary, Products, etc.)
+SELECT 
+    COUNT(*) AS TotalCustomers,
+    AVG(EstimatedSalary) AS AvgSalary,
+    AVG(NumOfProducts) AS AvgProducts,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    ROUND(SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) / COUNT(*) * 100, 2) AS ChurnRate
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY Exited
+ORDER BY ChurnRate DESC;
+
+-- Segmented Churn Rate Based on Multiple Conditions (Custom Segmentation)
+SELECT 
+    CASE
+        WHEN CreditScore BETWEEN 300 AND 499 THEN 'Low'
+        WHEN CreditScore BETWEEN 500 AND 699 THEN 'Medium'
+        ELSE 'High' 
+    END AS CreditScoreGroup,
+    CASE
+        WHEN Balance BETWEEN 0 AND 50000 THEN 'Low Balance'
+        WHEN Balance BETWEEN 50001 AND 100000 THEN 'Medium Balance'
+        ELSE 'High Balance' 
+    END AS BalanceGroup,
+    CASE
+        WHEN Age < 30 THEN 'Under 30'
+        WHEN Age BETWEEN 30 AND 40 THEN '30-40'
+        ELSE 'Above 40'
+    END AS AgeGroup,
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    ROUND(SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) / COUNT(*) * 100, 2) AS ChurnRate
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY CreditScoreGroup, BalanceGroup, AgeGroup
+ORDER BY ChurnRate DESC;
+
+-- Churned Customers with Complaints
+SELECT 
+    Complain,
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    ROUND(SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) / COUNT(*) * 100, 2) AS ChurnRate
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY Complain
+ORDER BY ChurnRate DESC;
+
+-- Churn Based on Customers with Balance and Number of Products
+SELECT 
+    CASE 
+        WHEN Balance BETWEEN 0 AND 50000 THEN '0-50k'
+        WHEN Balance BETWEEN 50001 AND 100000 THEN '50k-100k'
+        WHEN Balance BETWEEN 100001 AND 200000 THEN '100k-200k'
+        WHEN Balance > 200000 THEN '200k+'
+    END AS BalanceRange,
+    CASE 
+        WHEN NumOfProducts = 1 THEN '1 Product'
+        WHEN NumOfProducts = 2 THEN '2 Products'
+        WHEN NumOfProducts = 3 THEN '3 Products'
+        WHEN NumOfProducts >= 4 THEN '4+ Products'
+    END AS ProductRange,
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    (SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) * 100.0) / COUNT(*) AS ChurnRatePercentage
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY BalanceRange, ProductRange
+ORDER BY BalanceRange,ProductRange;
+
+-- Churn Based on Customers with Age and Tenure
+SELECT 
+    CASE 
+        WHEN Age BETWEEN 18 AND 30 THEN '18-30'
+        WHEN Age BETWEEN 31 AND 40 THEN '31-40'
+        WHEN Age BETWEEN 41 AND 50 THEN '41-50'
+        WHEN Age BETWEEN 51 AND 60 THEN '51-60'
+        WHEN Age > 60 THEN '60+'
+    END AS AgeRange,
+    CASE 
+        WHEN Tenure BETWEEN 0 AND 1 THEN '0-1'
+        WHEN Tenure BETWEEN 2 AND 3 THEN '2-3'
+        WHEN Tenure BETWEEN 4 AND 5 THEN '4-5'
+        WHEN Tenure BETWEEN 6 AND 7 THEN '6-7'
+        WHEN Tenure > 7 THEN '7+'
+    END AS TenureRange,
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    (SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) * 100.0) / COUNT(*) AS ChurnRatePercentage
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY AgeRange, TenureRange
+ORDER BY AgeRange, TenureRange;
+
+-- Churn Based on Customers with Age and Number of Products
+SELECT 
+    CASE 
+        WHEN Age BETWEEN 18 AND 30 THEN '18-30'
+        WHEN Age BETWEEN 31 AND 40 THEN '31-40'
+        WHEN Age BETWEEN 41 AND 50 THEN '41-50'
+        WHEN Age BETWEEN 51 AND 60 THEN '51-60'
+        WHEN Age > 60 THEN '60+'
+    END AS AgeRange,
+    CASE 
+        WHEN NumOfProducts = 1 THEN '1 Product'
+        WHEN NumOfProducts = 2 THEN '2 Products'
+        WHEN NumOfProducts = 3 THEN '3 Products'
+        WHEN NumOfProducts >= 4 THEN '4+ Products'
+    END AS ProductRange,
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    (SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) * 100.0) / COUNT(*) AS ChurnRatePercentage
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY AgeRange, ProductRange
+ORDER BY AgeRange, ProductRange;
+
+-- Churn Based on Customers with Age and Balance
+SELECT 
+    CASE 
+        WHEN Age BETWEEN 18 AND 30 THEN '18-30'
+        WHEN Age BETWEEN 31 AND 40 THEN '31-40'
+        WHEN Age BETWEEN 41 AND 50 THEN '41-50'
+        WHEN Age BETWEEN 51 AND 60 THEN '51-60'
+        WHEN Age > 60 THEN '60+'
+    END AS AgeRange,
+    CASE 
+        WHEN Balance BETWEEN 0 AND 50000 THEN '0-50k'
+        WHEN Balance BETWEEN 50001 AND 100000 THEN '50k-100k'
+        WHEN Balance BETWEEN 100001 AND 200000 THEN '100k-200k'
+        WHEN Balance > 200000 THEN '200k+'
+    END AS BalanceRange,
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    (SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) * 100.0) / COUNT(*) AS ChurnRatePercentage
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY AgeRange, BalanceRange
+ORDER BY AgeRange, BalanceRange;
+
+-- Churn Based on Customers with Balance and Estimated Salary
+SELECT 
+    CASE 
+        WHEN Balance BETWEEN 0 AND 50000 THEN '0-50k'
+        WHEN Balance BETWEEN 50001 AND 100000 THEN '50k-100k'
+        WHEN Balance BETWEEN 100001 AND 200000 THEN '100k-200k'
+        WHEN Balance > 200000 THEN '200k+'
+    END AS BalanceRange,
+    CASE 
+        WHEN EstimatedSalary BETWEEN 0 AND 50000 THEN '0-50k'
+        WHEN EstimatedSalary BETWEEN 50001 AND 100000 THEN '50k-100k'
+        WHEN EstimatedSalary BETWEEN 100001 AND 200000 THEN '100k-200k'
+        WHEN EstimatedSalary > 200000 THEN '200k+'
+    END AS SalaryRange,
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    (SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) * 100.0) / COUNT(*) AS ChurnRatePercentage
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY BalanceRange, SalaryRange
+ORDER BY BalanceRange, SalaryRange;
+
+-- Churn Based on Customers with Number of Products and Points Earned
+SELECT 
+    CASE 
+        WHEN NumOfProducts = 1 THEN '1 Product'
+        WHEN NumOfProducts = 2 THEN '2 Products'
+        WHEN NumOfProducts = 3 THEN '3 Products'
+        WHEN NumOfProducts >= 4 THEN '4+ Products'
+    END AS ProductRange,
+    CASE 
+        WHEN `Point Earned` BETWEEN 0 AND 500 THEN '0-500'
+        WHEN `Point Earned` BETWEEN 501 AND 1000 THEN '501-1000'
+        WHEN `Point Earned` BETWEEN 1001 AND 1500 THEN '1001-1500'
+        WHEN `Point Earned` > 1500 THEN '1500+'
+    END AS PointsRange,
+    COUNT(*) AS TotalCustomers,
+    SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) AS ChurnedCustomers,
+    (SUM(CASE WHEN Exited = 1 THEN 1 ELSE 0 END) * 100.0) / COUNT(*) AS ChurnRatePercentage
+FROM bank_customer_churn.`customer-churn-records`
+GROUP BY ProductRange, PointsRange
+ORDER BY ProductRange, PointsRange;
